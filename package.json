@@ -1,0 +1,22 @@
+{
+  "name": "friday.server",
+  "version": "1.0.0",
+  "description": "Server sido for firday project.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js 1988",
+    "dev": "nodemon src/index.js 1988",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Larry Wang",
+  "license": "MIT",
+  "dependencies": {
+    "koa": "^2.1.0",
+    "koa-bodyparser": "^4.2.0",
+    "koa-router": "^7.0.1",
+    "nedb": "^1.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
