@@ -17,7 +17,7 @@ const subRouters = ['types'].reduce((prev, name) => {
     prev[name] = require(`./${name}`);
     return prev;
 }, require('./resources'));
-const commandRouter = require('./command-router');
+const thingsRouter = require('./things');
 
 const router = new Router({
     prefix: '/api'
@@ -36,7 +36,7 @@ Object.entries(subRouters).forEach(([name, subRouter]) =>
     router.use(`/${name}`, subRouter.routes(), subRouter.allowedMethods())
 );
 
-// When state changes, we should send command to that thing
-router.use('/things', commandRouter.routes(), commandRouter.allowedMethods());
+// Things are special
+router.use('/things', thingsRouter.routes(), thingsRouter.allowedMethods());
 
 module.exports = router;

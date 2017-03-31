@@ -26,7 +26,7 @@ const autocompactionInterval = 3600 * 1e3;
         return new Promise((resolve, reject) =>
             superMethod.call(this, ...arguments, function() {
                 const [err, ...args] = arguments;
-                if (err) reject(DB_EXCEPTION.new());
+                if (err) reject(DB_EXCEPTION.new(err.message));
                 else resolve([...args]);
             })
         );
@@ -46,8 +46,8 @@ const createDb = name => {
 };
 
 // Create a db for auto increment ids: {name: 'things', id: 0}
-const idDb = createDb('ids');
-idDb.ensureIndex({
+const autoIncrementDB = createDb('autoIncrements');
+autoIncrementDB.ensureIndex({
     fieldName: 'name',
     unique: 'true'
 });
@@ -56,22 +56,21 @@ idDb.ensureIndex({
 module.exports = Object.entries(resources).reduce((prev, [name, resource]) => {
     const db = createDb(name);
 
-    if ('id' in resource.fields) {
-
-        db.ensureIndex({
-            fieldName: 'id',
+    Object.entries(resource.fields).forEach(([field, { autoIncrement }]) => {
+        autoIncrement && db.ensureIndex({
+            fieldName: field,
             unique: true
         });
+    });
 
-        db.getAutoIncrementId = () => idDb.update({
-            name
-        }, {
-            $inc: { id: 1 }
-        }, {
-            upsert: true,
-            returnUpdatedDocs: true
-        });
-    }
+    db.getAutoIncrement = field => autoIncrementDB.update({
+        name
+    }, {
+        $inc: { [`autoIncrements.${field}`]: 1 }
+    }, {
+        upsert: true,
+        returnUpdatedDocs: true
+    }).then(([ , affectedDocuments]) => affectedDocuments.autoIncrements[field]);
 
     prev[name] = db;
 

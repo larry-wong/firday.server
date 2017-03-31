@@ -13,6 +13,5 @@
 'use strict';
 
 module.exports = {
-    id: 2,
     checkState: state => [0, 1].includes(state)
 };

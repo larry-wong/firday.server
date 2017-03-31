@@ -13,6 +13,5 @@
 'use strict';
 
 module.exports = {
-    id: 3,
     checkState: state => state >= 0 && state <= 1
 };

@@ -20,7 +20,9 @@ module.exports = {
     allowDelete: true,
 
     fields: {
-        id: '',
+        id: {
+            autoIncrement: true
+        },
         name: '',
         commands: []
     }

@@ -4,7 +4,7 @@
 #
 # Author:	Larry Wang
 #
-# Created:	2017-03-25 21:42
+# Created:	2017-03-28 22:48
 #
 # Description:	
 #
@@ -12,11 +12,7 @@
 
 'use strict';
 
-const Router = require('koa-router');
-const types = require('../types');
-
-module.exports = new Router().get('/', ctx=> {
-    ctx.body = Object.entries(types).map(([name, type]) => ({
-        name
-    }));
-});
+module.exports = ['gpio', 'mqtt'].reduce((prev, name) => {
+    prev[name] = require(`./${name}`);
+    return prev;
+}, {});

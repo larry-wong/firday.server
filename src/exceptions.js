@@ -12,7 +12,7 @@
 
 'use strict';
 
-const symbolFactory = () => Object.assign(Symbol(), {
+const factory = () => Object.assign(Symbol(), {
     new: function(message) {
         return Object.assign(new Error(message), {
             name: this
@@ -21,7 +21,7 @@ const symbolFactory = () => Object.assign(Symbol(), {
 });
 
 module.exports = {
-    PARAM_EXCRPTION: symbolFactory(),
-    NOT_FOUND_ECXEPTION: symbolFactory(),
-    DB_EXCEPTION: symbolFactory()
+    PARAM_EXCRPTION: factory(),
+    NOT_FOUND_ECXEPTION: factory(),
+    DB_EXCEPTION: factory()
 };

@@ -13,6 +13,5 @@
 'use strict';
 
 module.exports = {
-    id: 1,
     checkState: state => state === 1
 };

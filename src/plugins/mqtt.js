@@ -4,7 +4,7 @@
 #
 # Author:	Larry Wang
 #
-# Created:	2017-03-25 21:42
+# Created:	2017-03-31 15:43
 #
 # Description:	
 #
@@ -12,11 +12,4 @@
 
 'use strict';
 
-const Router = require('koa-router');
-const types = require('../types');
-
-module.exports = new Router().get('/', ctx=> {
-    ctx.body = Object.entries(types).map(([name, type]) => ({
-        name
-    }));
-});
+module.exports = undefined;

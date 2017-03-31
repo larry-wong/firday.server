@@ -12,6 +12,13 @@
 
 'use strict';
 
-const server = require('./server');
+const db = require('./database');
+const pool = require('./pool');
+const webServer = require('./web-server');
 
-server.listen(process.argv[2] || 80);
+// Load things from db & create connections
+db.things.find({}).then(([things]) => things.forEach(thing =>
+    pool.createConnection(thing)));
+
+// Start webserver
+webServer.listen(process.argv[2] || 80);

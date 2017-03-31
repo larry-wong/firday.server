@@ -33,5 +33,6 @@ module.exports = async (ctx, next) => {
             ctx.status = 500;
             break;
         }
+        e.message && console.error(`Error: ${e.message}`);
     }
 };

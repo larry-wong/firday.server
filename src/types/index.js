@@ -13,9 +13,6 @@
 'use strict';
 
 module.exports = ['button', 'switch', 'slider'].reduce((prev, name) => {
-    const type = require(`./${name}`);
-    const id = type.id;
-    delete type.id;
-    prev[id] = Object.assign(type, { name });
+    prev[name] = require(`./${name}`);
     return prev;
 }, {});

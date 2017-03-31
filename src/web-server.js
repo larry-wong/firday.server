@@ -21,7 +21,7 @@ const app = new Koa();
 
 app.use(exctptionMiddleware);
 
-app.use(bodyParser());
+app.use(bodyParser({ strict: false }));
 
 app.use(router.routes()).use(router.allowedMethods());
 
