@@ -12,7 +12,11 @@
 
 'use strict';
 
+const defaultType = {
+    checkState: () => true
+};
+
 module.exports = ['button', 'switch', 'slider'].reduce((prev, name) => {
-    prev[name] = require(`./${name}`);
+    prev[name] = Object.assign({}, defaultType, require(`./${name}`));
     return prev;
 }, {});

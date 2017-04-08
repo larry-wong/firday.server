@@ -31,13 +31,11 @@ module.exports = {
         const { name: pluginName, params: pluginParams } = thing.plugin;
         const plugin = plugins[pluginName];
 
-        plugin && plugin.create && await plugin.create(pluginParams);
+        await plugin.create(pluginParams);
 
         // Try to get state after creation
-        let state = plugin && plugin.getState ? await plugin.getState(pluginParams)
-            : undefined;
-        state = (!type.checkState || type.checkState(state))
-            && state || undefined;
+        let state = await plugin.getState(pluginParams);
+        state = type.checkState(state) ? state : undefined;
 
         // Save this connections
         store.set(thing.id, {
@@ -55,7 +53,7 @@ module.exports = {
 
         const { plugin, pluginParams } = store.get(id);
 
-        plugin && plugin.destroy && await plugin.destroy(pluginParams);
+        await plugin.destroy(pluginParams);
 
         store.delete(id);
     },
@@ -75,7 +73,7 @@ module.exports = {
         if (type.checkState && !type.checkState(state))
             return false;
         if (state !== currentState) {
-            plugin && plugin.setState && await plugin.setState(pluginParams, state);
+            plugin.setState(pluginParams, state);
             store.get(id).state = state;
         }
         return true;

@@ -23,6 +23,7 @@ module.exports = new Router()
 
 }).post('/', async ctx => {
     await pool.createConnection(ctx.body);
+    ctx.body.state = pool.getState(ctx.body.id);
 
 }).patch('/:id', async ctx => {
     await pool.descroyConnection(ctx.params.id);

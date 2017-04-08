@@ -12,7 +12,17 @@
 
 'use strict';
 
+const noop = new Function();
+
+const defaultPlugin = {
+    params: [],
+    create: noop,
+    destroy: noop,
+    getState: noop,
+    setState: noop
+};
+
 module.exports = ['gpio', 'mqtt'].reduce((prev, name) => {
-    prev[name] = require(`./${name}`);
+    prev[name] = Object.assign({}, defaultPlugin, require(`./${name}`));
     return prev;
 }, {});
