@@ -1,0 +1,4 @@
+jwt_secret: your select
+accounts:
+    - account: jack
+      passwd: passwd-with-sha1

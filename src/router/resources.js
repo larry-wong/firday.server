@@ -15,7 +15,7 @@
 const Router = require('koa-router');
 const resources = require('../resources');
 const db = require('../database');
-const { PARAM_EXCRPTION, NOT_FOUND_ECXEPTION } = require('../exceptions');
+const { PARAM_EXCRPTION, NOT_FOUND_EXCEPTION } = require('../exceptions');
 
 const checkBodyData = (data, fields) => {
     for (const key in data) {
@@ -45,19 +45,21 @@ module.exports = Object.entries(resources).reduce((prev, [name, resource]) => {
     });
 
     resource.allowPost && router.post('/', async (ctx, next) => {
-        checkBodyData(ctx.request.body, resource.fields);
+        const body = ctx.request.body;
+
+        checkBodyData(body, resource.fields);
 
         Object.entries(resource.fields).forEach(([field, { required }]) => {
-            if (required && !Reflect.has(ctx.request.body, field))
+            if (required && !Reflect.has(body, field))
                 throw PARAM_EXCRPTION.new(`Miss param: ${field}`);
         });
 
         for (const key in resource.fields) {
             if (resource.fields[key].autoIncrement)
-                ctx.request.body[key] = await db[name].getAutoIncrement(key);
+                body[key] = await db[name].getAutoIncrement(key);
         }
 
-        const [newDoc] = await db[name].insert(ctx.request.body);
+        const [newDoc] = await db[name].insert(body);
         Reflect.deleteProperty(newDoc, '_id');
         ctx.body = newDoc;
 
@@ -72,7 +74,7 @@ module.exports = Object.entries(resources).reduce((prev, [name, resource]) => {
         }, { $set: ctx.request.body }, {
             returnUpdatedDocs: true
         });
-        if (!numAffected) throw NOT_FOUND_ECXEPTION.new();
+        if (!numAffected) throw NOT_FOUND_EXCEPTION.new();
         Reflect.deleteProperty(affectedDocuments, '_id');
         ctx.body = affectedDocuments;
 
@@ -83,7 +85,7 @@ module.exports = Object.entries(resources).reduce((prev, [name, resource]) => {
         const [numRemoved] = await db[name].remove({
             id: ~~ctx.params.id
         }, {});
-        if (!numRemoved) throw NOT_FOUND_ECXEPTION.new();
+        if (!numRemoved) throw NOT_FOUND_EXCEPTION.new();
         ctx.status = 200;
 
         await next();

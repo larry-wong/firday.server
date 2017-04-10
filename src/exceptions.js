@@ -22,6 +22,8 @@ const factory = () => Object.assign(Symbol(), {
 
 module.exports = {
     PARAM_EXCRPTION: factory(),
-    NOT_FOUND_ECXEPTION: factory(),
+    NOT_FOUND_EXCEPTION: factory(),
+    UNAUTHORIZED_EXCEPTION: factory(),
+    FORBIDDEN_EXCEPTION: factory(),
     DB_EXCEPTION: factory()
 };

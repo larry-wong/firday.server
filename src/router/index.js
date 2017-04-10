@@ -13,11 +13,14 @@
 'use strict';
 
 const Router = require('koa-router');
-const subRouters = ['types'].reduce((prev, name) => {
+const jwt = require('jsonwebtoken');
+const subRouters = ['types', 'token'].reduce((prev, name) => {
     prev[name] = require(`./${name}`);
     return prev;
 }, require('./resources'));
 const thingsRouter = require('./things');
+const { jwt_secret } = require('../config');
+const { UNAUTHORIZED_EXCEPTION, FORBIDDEN_EXCEPTION } = require('../exceptions');
 
 const router = new Router({
     prefix: '/api'
@@ -31,10 +34,25 @@ router.get('/', ctx => {
     ctx.body = `{\n${ret.join(',\n')}\n}`;
 });
 
+// To auth token
+const authMiddleware = async (ctx, next) => {
+    if (ctx.header.token === undefined) throw FORBIDDEN_EXCEPTION.new();
+    try {
+        Object.assign(ctx, jwt.verify(ctx.header.token.toString(), jwt_secret));
+    } catch (err) {
+        throw UNAUTHORIZED_EXCEPTION.new();
+    }
+    await next();
+};
+
 // The rests
-Object.entries(subRouters).forEach(([name, subRouter]) =>
-    router.use(`/${name}`, subRouter.routes(), subRouter.allowedMethods())
-);
+Object.entries(subRouters).forEach(([name, subRouter]) => {
+    if (name === 'token')
+        router.use(`/${name}`, subRouter.routes(), subRouter.allowedMethods());
+    else
+        router.use(`/${name}`, authMiddleware
+            , subRouter.routes(), subRouter.allowedMethods());
+});
 
 // Things are special
 router.use('/things', thingsRouter.routes(), thingsRouter.allowedMethods());

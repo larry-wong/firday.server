@@ -11,11 +11,14 @@
   "author": "Larry Wang",
   "license": "MIT",
   "dependencies": {
+    "js-yaml": "^3.8.3",
+    "jsonwebtoken": "^7.3.0",
     "koa": "^2.1.0",
     "koa-bodyparser": "^4.2.0",
     "koa-router": "^7.0.1",
     "nedb": "^1.8.0",
-    "rpi-gpio": "^0.7.0"
+    "rpi-gpio": "^0.7.0",
+    "sha1": "^1.1.1"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"

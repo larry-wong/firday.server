@@ -14,7 +14,7 @@
 
 const Router = require('koa-router');
 const pool = require('../pool');
-const { PARAM_EXCRPTION, NOT_FOUND_ECXEPTION } = require('../exceptions');
+const { PARAM_EXCRPTION, NOT_FOUND_EXCEPTION } = require('../exceptions');
 
 module.exports = new Router()
 
@@ -34,7 +34,7 @@ module.exports = new Router()
 
 }).get('/:id/state', async ctx => {
     const state = pool.getState(ctx.params.id);
-    if (state === undefined) throw NOT_FOUND_ECXEPTION.new();
+    if (state === undefined) throw NOT_FOUND_EXCEPTION.new();
     else ctx.body = state;
 
 }).post('/:id/state', async ctx => {

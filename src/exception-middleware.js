@@ -12,7 +12,8 @@
 
 'use strict';
 
-const { PARAM_EXCRPTION, NOT_FOUND_ECXEPTION, DB_EXCEPTION }
+const { PARAM_EXCRPTION, NOT_FOUND_EXCEPTION, UNAUTHORIZED_EXCEPTION
+    , FORBIDDEN_EXCEPTION, DB_EXCEPTION }
     = require('./exceptions');
 
 module.exports = async (ctx, next) => {
@@ -23,8 +24,14 @@ module.exports = async (ctx, next) => {
         case PARAM_EXCRPTION:
             ctx.status = 400;
             break;
-        case NOT_FOUND_ECXEPTION:
+        case NOT_FOUND_EXCEPTION:
             ctx.status = 404;
+            break;
+        case UNAUTHORIZED_EXCEPTION:
+            ctx.status = 401;
+            break;
+        case FORBIDDEN_EXCEPTION:
+            ctx.status = 403;
             break;
         case DB_EXCEPTION:
             ctx.status = 500;
